@@ -5,38 +5,224 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Quran Audio</title>
 <style>
-:root{--bg:#031525;--card:#082944;--text:#fff;--muted:#b9d4ee;--blue:#10cfff}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(#031525,#020b15);color:var(--text);font-family:Arial,sans-serif}
-.app{max-width:520px;margin:auto;min-height:100vh;padding:18px 14px 82px}
-header{display:flex;align-items:center;gap:10px}.logo{font-size:34px;color:#10cfff}.brand h1{margin:0;font-size:25px}.brand p{margin:3px 0;color:var(--muted);font-size:13px}.menu{margin-left:auto;background:none;border:0;color:#9ed4ff;font-size:30px}
-.top{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0}.top button,.lesson,.nav button{border:1px solid #187bc0;background:#07233b;color:#fff;border-radius:15px;padding:14px;cursor:pointer}
-.card{border:1px solid #087dc8;border-radius:24px;overflow:hidden;background:#061d31}.hero{padding:34px 18px;text-align:center;min-height:390px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(180deg,#123a5d,#06192b 75%)}.hero h2{font-size:30px;margin:10px}.hero p{color:#d8e7f5;font-size:17px}.primary{background:#087cf5!important;border:0!important;font-weight:bold;box-shadow:0 0 18px #087cf588}.content,.player{padding:16px}.lesson{width:100%;display:flex;gap:12px;text-align:left;margin:8px 0}.lesson .name{flex:1;font-weight:bold}.lesson.active{border-color:#10cfff;box-shadow:0 0 12px #10cfff55}.player .cover{padding:30px 10px;text-align:center;background:linear-gradient(160deg,#143f63,#071a2b);border-radius:18px}.arabic{font-size:26px;margin:10px}.progress{height:7px;background:#0a5a80;border-radius:9px;margin:22px 0 5px}.progress i{display:block;height:100%;width:0;background:#10cfff}.times{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.controls{display:flex;justify-content:space-around;margin:22px 0}.control{width:82px;height:82px;border:0;border-radius:50%;color:white;font-size:30px;cursor:pointer}.control small{display:block;font-size:11px;margin-top:6px}.play{background:#00df58}.stop{background:#ff1645}.repeat{background:#6635ff}.nav{display:grid;grid-template-columns:1fr 1fr;gap:10px}.nav .next{background:#087cf5}.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);height:70px;background:#031525f5;border-top:1px solid #155a8c;display:grid;grid-template-columns:1fr 1fr 1fr 1fr}.bottom button{background:none;border:0;color:#b9d4ee;font-weight:bold}.bottom .active{color:#10cfff}.drawer{display:none;position:fixed;inset:0;background:#0008;z-index:5}.drawer.open{display:block}.drawerbox{margin-left:auto;width:min(350px,88%);height:100%;background:#041c30;padding:25px}.drawerbox button{display:block;width:100%;padding:17px;background:none;border:0;border-bottom:1px solid #174967;color:#fff;text-align:left;font-size:16px}.close{float:right;border:0!important;font-size:28px!important}.light{--bg:#edf7fc;--text:#08223a;--muted:#4c687d}.green{--bg:#061b12;--card:#103a28}
+:root{
+ --bg:#001525;--bg2:#00243a;--line:#087eb8;--cyan:#08dfff;
+ --text:#fff;--muted:#d3e5f0;--blue:#078cff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#00101d;color:var(--text);font-family:Arial,sans-serif}
+body.light{--bg:#eef7fb;--bg2:#fff;--line:#1686bd;--text:#082238;--muted:#36566a}
+body.green{--bg:#041c14;--bg2:#073225;--line:#1ca477;--cyan:#54ffd0;--blue:#159b78}
+button{font:inherit;color:inherit;cursor:pointer}
+.app{width:min(100%,430px);min-height:100svh;margin:auto;background:
+radial-gradient(circle at 30% 12%,rgba(0,170,255,.13),transparent 28%),
+linear-gradient(180deg,var(--bg2),var(--bg));position:relative;overflow:hidden}
+header{height:86px;padding:15px 20px 9px;display:flex;align-items:flex-start;justify-content:space-between}
+.brand h1{margin:0;font-size:22px;line-height:1.05}.brand p{margin:5px 0 0;font-size:13px;color:var(--muted)}
+.actions{display:flex;align-items:center;gap:7px}
+.pill{height:38px;padding:0 12px;border:1px solid var(--line);border-radius:21px;background:rgba(0,20,40,.35);display:flex;align-items:center;gap:6px;font-size:13px}
+.iconbtn{width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:rgba(0,20,40,.35);font-size:20px}
+.menu-btn{width:35px;height:38px;border:0;background:transparent;font-size:27px;line-height:1}
+
+.screen{display:none;padding:0 18px 88px;min-height:calc(100svh - 86px)}
+.screen.active{display:block}
+
+/* HOME */
+.home-hero{height:calc(100svh - 175px);min-height:650px;position:relative;overflow:hidden;border:1px solid var(--line);
+border-radius:150px 150px 28px 28px;background:
+linear-gradient(180deg,rgba(0,11,24,.03) 15%,rgba(0,8,20,.16) 45%,rgba(0,8,19,.93) 76%,var(--bg) 100%),
+url("mosque.png") center top/cover no-repeat;box-shadow:0 0 28px rgba(0,188,255,.13)}
+.home-content{position:absolute;left:0;right:0;bottom:32px;text-align:center;padding:0 20px}
+.welcome{font-family:Georgia,serif;font-size:27px;margin:0 0 2px}.home-title{font-size:34px;margin:0 0 16px}
+.home-copy{font-family:Georgia,serif;font-size:18px;line-height:1.45;margin:0 0 24px}
+.start{width:100%;height:70px;border-radius:38px;border:1px solid #58edff;background:linear-gradient(180deg,#139aff,#0675ee);
+box-shadow:0 0 25px rgba(0,183,255,.5);font-weight:700;font-size:18px}.start span{float:right;margin-right:17px;font-size:24px}
+
+/* LESSON */
+.lesson-card{height:calc(100svh - 255px);min-height:555px;border:1px solid var(--line);border-radius:24px;overflow:hidden;position:relative;
+background:linear-gradient(180deg,rgba(0,10,22,.05),rgba(0,8,20,.2) 48%,rgba(0,8,20,.96) 82%,var(--bg) 100%),url("mosque.png") center top/cover no-repeat}
+.lesson-info{position:absolute;left:0;right:0;bottom:32px;text-align:center}
+.badge{display:inline-block;border:1px solid var(--cyan);border-radius:9px;padding:7px 14px;background:rgba(0,25,45,.62);font-size:14px}
+.lesson-name{font-size:34px;margin:10px 0 2px}.arabic{font-size:28px;margin-bottom:5px}.meaning{font-family:Georgia,serif;font-size:19px}
+.player{padding:15px 2px 0}.bar{height:9px;border-radius:8px;background:#073858;border:1px solid #0c83bd;overflow:hidden}.bar i{display:block;width:0;height:100%;background:var(--cyan)}
+.times{display:flex;justify-content:space-between;font-size:13px;margin:8px 1px 18px;color:var(--muted)}
+.controls{display:flex;justify-content:space-around}.control{border:0;background:none;text-align:center;width:85px}
+.round{width:70px;height:70px;border-radius:50%;margin:auto;display:flex;align-items:center;justify-content:center;font-size:35px}
+.control small{display:block;margin-top:8px;font-weight:700;font-size:14px}
+.play .round{background:#09c84b;border:2px solid #22ff70;box-shadow:0 0 20px rgba(0,255,100,.25)}
+.stop .round{background:#ff1b3b;border:2px solid #ff7185;box-shadow:0 0 20px rgba(255,30,70,.25)}
+.repeat .round{background:#3f18ff;border:2px solid #8f7aff;box-shadow:0 0 20px rgba(85,40,255,.25)}
+
+/* BOTTOM */
+.bottom{position:fixed;z-index:20;bottom:0;left:50%;transform:translateX(-50%);width:min(430px,100%);
+height:76px;background:rgba(0,18,33,.96);border-top:1px solid var(--line);display:flex}
+.bottom button{flex:1;border:0;background:none;color:var(--muted);font-size:14px}.bottom button.active{color:var(--cyan)}
+.bottom .ico{display:block;font-size:26px;height:28px}
+
+/* MENU */
+.drawer{display:none;position:fixed;inset:0;z-index:50}.drawer.open{display:block}
+.shade{position:absolute;inset:0;background:rgba(0,0,0,.52)}
+.panel{position:absolute;right:0;top:0;width:min(355px,88vw);height:100%;background:#032238;border-left:1px solid #0a6f9d;padding:22px 25px}
+.close{position:absolute;right:19px;top:15px;border:0;background:none;font-size:34px}
+.menu-logo{margin:66px 0 30px;display:flex;align-items:center;gap:14px}.book{width:60px;height:60px;border:3px solid var(--cyan);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:31px}
+.menu-logo strong{font-size:20px}.menu-logo span{display:block;font-size:12px;margin-top:4px}
+.item{width:100%;height:74px;border:0;border-bottom:1px solid #23617d;background:none;display:flex;align-items:center;text-align:left;font-size:16px;gap:16px}
+.item .ico{width:42px;text-align:center;font-size:28px}.arrow{margin-left:auto;font-size:30px;color:#cbe8f7}
+
+@media(min-width:700px){body{padding:0 20px}.app{box-shadow:0 0 55px rgba(0,0,0,.35)}}
 </style>
 </head>
-<body><div class="app">
-<header><div class="logo">◉</div><div class="brand"><h1>Quran Audio</h1><p>Luisteren • Leren • Herhalen</p></div><button class="menu" onclick="openMenu()">☰</button></header>
-<div class="top"><button onclick="language()">🌐 <span id="language">Nederlands</span></button><button onclick="theme()">🌙 <span id="theme">Donker</span></button></div>
-<main id="main"></main></div>
+<body>
+<div class="app">
+<header>
+ <div class="brand"><h1>Quran Audio</h1><p>Luisteren • Leren • Herhalen</p></div>
+ <div class="actions">
+   <button class="pill" id="lang">🌐 NL</button>
+   <button class="iconbtn" id="theme" aria-label="Thema">◐</button>
+   <button class="menu-btn" id="openMenu">☰</button>
+ </div>
+</header>
+
+<section id="home" class="screen active">
+ <div class="home-hero">
+  <div class="home-content">
+   <p class="welcome">Welkom bij</p>
+   <h2 class="home-title">Quran Audio</h2>
+   <p class="home-copy">Luister, leer en herhaal<br>waar en wanneer je wilt.</p>
+   <button class="start" id="start">Ga naar de lessen <span>→</span></button>
+  </div>
+ </div>
+</section>
+
+<section id="lessons" class="screen">
+ <div class="lesson-card">
+  <div class="lesson-info">
+   <span class="badge" id="badge">Les 1</span>
+   <h2 class="lesson-name" id="name">An-Nas</h2>
+   <div class="arabic" id="arabic">سُورَةُ النَّاسِ</div>
+   <div class="meaning" id="meaning">De mensen</div>
+  </div>
+ </div>
+ <div class="player">
+  <div class="bar"><i id="progress"></i></div>
+  <div class="times"><span id="cur">00:00</span><span id="dur">00:46</span></div>
+  <div class="controls">
+   <button class="control play" id="play"><span class="round">▶</span><small>Afspelen</small></button>
+   <button class="control stop" id="stop"><span class="round">■</span><small>Stop</small></button>
+   <button class="control repeat" id="repeat"><span class="round">↻</span><small>Herhalen</small></button>
+  </div>
+ </div>
+</section>
+
 <nav class="bottom">
-<button id="prevBottom" onclick="prev()">‹<br>Vorige</button>
-<button id="home" class="active" onclick="home()">⌂<br>Home</button>
-<button id="lessons" onclick="lessons()">📖<br>Lessen</button>
-<button id="nextBottom" onclick="next()">›<br>Volgende</button>
+ <button id="homeNav" class="active"><span class="ico">⌂</span>Home</button>
+ <button id="lessonNav"><span class="ico">▢</span>Lessen</button>
 </nav>
-<div id="drawer" class="drawer" onclick="closeMenu(event)"><div class="drawerbox" onclick="event.stopPropagation()"><button class="close" onclick="closeMenu()">×</button><h2>Menu</h2><button onclick="voice()">🎧 Stem kiezen</button><button>⚙️ Instellingen</button><button>ⓘ Over deze app</button><button>🔒 Privacy</button></div></div>
+
+<div class="drawer" id="drawer">
+ <div class="shade" id="shade"></div>
+ <aside class="panel">
+  <button class="close" id="close">×</button>
+  <div class="menu-logo"><div class="book">⌁</div><div><strong>Quran Audio</strong><span>Luisteren • Leren • Herhalen</span></div></div>
+  <button class="item"><span class="ico">🎧</span>Stem kiezen<span class="arrow">›</span></button>
+  <button class="item"><span class="ico">⚙</span>Instellingen<span class="arrow">›</span></button>
+  <button class="item"><span class="ico">ⓘ</span>Over deze app<span class="arrow">›</span></button>
+  <button class="item"><span class="ico">♥</span>Steun de app<span class="arrow">›</span></button>
+  <button class="item"><span class="ico">⬟</span>Privacy<span class="arrow">›</span></button>
+  <button class="item"><span class="ico">?</span>Help & contact<span class="arrow">›</span></button>
+ </aside>
+</div>
+
+<audio id="audio" preload="metadata"></audio>
+
 <script>
-const data=[
-["Quraysh","سورة قريش","De Quraysh","106.mp3"],["Al-Ma'un","سورة الماعون","De hulp","107.mp3"],["Al-Kawthar","سورة الكوثر","De overvloed","108.mp3"],["Al-Kafirun","سورة الكافرون","De ongelovigen","109.mp3"],["An-Nasr","سورة النصر","De hulp","110.mp3"],["Al-Masad","سورة المسد","De palmvezel","111.mp3"],["Al-Ikhlas","سورة الإخلاص","De zuivere toewijding","112.mp3"],["Al-Falaq","سورة الفلق","De dageraad","113.mp3"],["An-Nas","سورة الناس","De mensen","114.mp3"]];
-let i=Number(localStorage.lesson||0),a=null,repeat=false;
-function save(){localStorage.lesson=i}
-function home(){if(a){a.pause();a=null}document.getElementById("main").innerHTML='<section class="card hero"><h2>Welkom bij<br>Quran Audio</h2><p>Luister, leer en herhaal waar en wanneer je wilt.</p><button class="primary" onclick="lessons()">Ga naar de lessen →</button></section>';tabs("home")}
-function lessons(){document.getElementById("main").innerHTML='<section class="card content"><h2>Lessen</h2>'+data.map((x,n)=>'<button class="lesson '+(n==i?'active':'')+'" onclick="lesson('+n+')"><b>Les '+(n+1)+'</b><span class="name">'+x[0]+'</span><span>›</span></button>').join("")+'</section>';tabs("lessons")}
-function lesson(n){i=n;save();let x=data[i];document.getElementById("main").innerHTML='<section class="card player"><div class="cover"><small>Les '+(i+1)+'</small><h2>'+x[0]+'</h2><div class="arabic">'+x[1]+'</div><p>'+x[2]+'</p></div><div class="progress"><i id="bar"></i></div><div class="times"><span id="now">00:00</span><span id="total">--:--</span></div><div class="controls"><button class="control play" onclick="toggle()">▶<small>Afspelen</small></button><button class="control stop" onclick="stop()">■<small>Stop</small></button><button class="control repeat" onclick="repeat=!repeat">↻<small>Herhalen</small></button></div></section>';tabs("lessons");a=new Audio("audio/"+x[3]);a.onloadedmetadata=()=>total.textContent=fmt(a.duration);a.ontimeupdate=()=>{bar.style.width=(a.currentTime/a.duration*100)+"%";now.textContent=fmt(a.currentTime)};a.onended=()=>{if(repeat){a.currentTime=0;a.play()}}}
-function toggle(){if(!a)lesson(i);else a.paused?a.play():a.pause()}function stop(){if(a){a.pause();a.currentTime=0}}function prev(){if(i>0)lesson(i-1)}function next(){if(i<data.length-1)lesson(i+1)}function fmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0")}
-function tabs(x){home.classList.toggle("active",x=="home");lessons.classList.toggle("active",x=="lessons")}
-function openMenu(){drawer.classList.add("open")}function closeMenu(e){if(!e||e.target==drawer)drawer.classList.remove("open")}
-function voice(){alert("Stem kiezen\n\nAli Jaber (standaard)");closeMenu()}
-function language(){let x=prompt("Kies: Nederlands / English / Soomaali / العربية","Nederlands");if(x){language.textContent=x;localStorage.language=x}}
-function theme(){let x=prompt("Kies: Donker / Licht / Groen","Donker");if(x){document.body.className=x=="Licht"?"light":x=="Groen"?"green":"";document.getElementById("theme").textContent=x;localStorage.theme=x}}
-if(localStorage.theme)theme.textContent=localStorage.theme;if(localStorage.language)language.textContent=localStorage.language;home();
-</script></body></html>
+const lessons=[
+ {id:"106",name:"Quraysh",arabic:"سُورَةُ قُرَيْشٍ",meaning:"Quraysh"},
+ {id:"107",name:"Al-Ma'un",arabic:"سُورَةُ الْمَاعُونِ",meaning:"De hulp"},
+ {id:"108",name:"Al-Kawthar",arabic:"سُورَةُ الْكَوْثَرِ",meaning:"De overvloed"},
+ {id:"109",name:"Al-Kafirun",arabic:"سُورَةُ الْكَافِرُونَ",meaning:"De ongelovigen"},
+ {id:"110",name:"An-Nasr",arabic:"سُورَةُ النَّصْرِ",meaning:"De hulp"},
+ {id:"111",name:"Al-Masad",arabic:"سُورَةُ الْمَسَدِ",meaning:"De palmvezel"},
+ {id:"112",name:"Al-Ikhlas",arabic:"سُورَةُ الْإِخْلَاصِ",meaning:"De zuiverheid"},
+ {id:"113",name:"Al-Falaq",arabic:"سُورَةُ الْفَلَقِ",meaning:"De dageraad"},
+ {id:"114",name:"An-Nas",arabic:"سُورَةُ النَّاسِ",meaning:"De mensen"}
+];
+let idx=8, touchX=0;
+const audio=document.getElementById("audio"), progress=document.getElementById("progress");
+const cur=document.getElementById("cur"), dur=document.getElementById("dur"), play=document.getElementById("play");
+
+function show(page){
+ document.querySelectorAll(".screen").forEach(x=>x.classList.remove("active"));
+ document.getElementById(page).classList.add("active");
+ document.getElementById("homeNav").classList.toggle("active",page==="home");
+ document.getElementById("lessonNav").classList.toggle("active",page==="lessons");
+}
+function loadLesson(i,auto=false){
+ idx=Math.max(0,Math.min(lessons.length-1,i));
+ const l=lessons[idx];
+ audio.pause(); audio.src="audio/"+l.id+".mp3"; audio.load();
+ document.getElementById("badge").textContent="Les "+(idx+1);
+ document.getElementById("name").textContent=l.name;
+ document.getElementById("arabic").textContent=l.arabic;
+ document.getElementById("meaning").textContent=l.meaning;
+ progress.style.width="0%";cur.textContent="00:00";dur.textContent="--:--";
+ play.querySelector(".round").textContent="▶";
+ if(auto) audio.play().then(()=>play.querySelector(".round").textContent="Ⅱ").catch(()=>{});
+}
+function next(){if(idx<lessons.length-1)loadLesson(idx+1,true)}
+function prev(){if(idx>0)loadLesson(idx-1,false)}
+function fmt(s){s=Math.floor(s||0);return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")}
+
+document.getElementById("start").onclick=()=>{show("lessons");loadLesson(idx,false)};
+document.getElementById("homeNav").onclick=()=>show("home");
+document.getElementById("lessonNav").onclick=()=>show("lessons");
+
+document.getElementById("openMenu").onclick=()=>document.getElementById("drawer").classList.add("open");
+document.getElementById("close").onclick=()=>document.getElementById("drawer").classList.remove("open");
+document.getElementById("shade").onclick=()=>document.getElementById("drawer").classList.remove("open");
+
+play.onclick=()=>{
+ if(audio.paused){audio.play().then(()=>play.querySelector(".round").textContent="Ⅱ").catch(()=>{});}
+ else{audio.pause();play.querySelector(".round").textContent="▶";}
+};
+document.getElementById("stop").onclick=()=>{audio.pause();audio.currentTime=0;progress.style.width="0%";cur.textContent="00:00";play.querySelector(".round").textContent="▶"};
+document.getElementById("repeat").onclick=()=>{audio.currentTime=0;audio.play().then(()=>play.querySelector(".round").textContent="Ⅱ").catch(()=>{})};
+audio.addEventListener("loadedmetadata",()=>dur.textContent=fmt(audio.duration));
+audio.addEventListener("timeupdate",()=>{progress.style.width=(audio.duration?audio.currentTime/audio.duration*100:0)+"%";cur.textContent=fmt(audio.currentTime)});
+audio.addEventListener("ended",()=>play.querySelector(".round").textContent="▶");
+
+const card=document.querySelector(".lesson-card");
+card.addEventListener("touchstart",e=>touchX=e.changedTouches[0].screenX,{passive:true});
+card.addEventListener("touchend",e=>{let dx=e.changedTouches[0].screenX-touchX;if(Math.abs(dx)>70){dx<0?next():prev()}},{passive:true});
+document.addEventListener("keydown",e=>{if(e.key==="ArrowRight")next();if(e.key==="ArrowLeft")prev()});
+
+/* Real language cycling: no browser prompt. */
+let language=0;
+const langData=[
+ ["NL","Luisteren • Leren • Herhalen","Welkom bij","Luister, leer en herhaal","waar en wanneer je wilt.","Ga naar de lessen"],
+ ["EN","Listen • Learn • Repeat","Welcome to","Listen, learn and repeat","wherever and whenever you want.","Go to lessons"],
+ ["SO","Dhageyso • Baro • Ku celi","Ku soo dhowow","Dhageyso, baro oo ku celi","meel kasta iyo waqti kasta.","U gudub casharrada"],
+ ["AR","استمع • تعلّم • كرّر","مرحباً بك في","استمع وتعلّم وكرّر","أينما ومتى شئت.","اذهب إلى الدروس"]
+];
+document.getElementById("lang").onclick=()=>{
+ language=(language+1)%langData.length; const d=langData[language];
+ document.getElementById("lang").textContent="🌐 "+d[0];
+ document.querySelector(".brand p").textContent=d[1];
+ document.querySelector(".welcome").textContent=d[2];
+ document.querySelector(".home-copy").innerHTML=d[3]+"<br>"+d[4];
+ document.getElementById("start").childNodes[0].textContent=d[5]+" ";
+};
+
+/* Theme cycles: dark -> light -> green -> dark. */
+let theme=0;
+document.getElementById("theme").onclick=()=>{
+ theme=(theme+1)%3;
+ document.body.classList.toggle("light",theme===1);
+ document.body.classList.toggle("green",theme===2);
+};
+
+loadLesson(idx,false);
+</script>
+</div>
+</body>
+</html>
