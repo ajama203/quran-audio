@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Quran Audio</title>
+<style>
+:root{--bg:#031525;--card:#082944;--text:#fff;--muted:#b9d4ee;--blue:#10cfff}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(#031525,#020b15);color:var(--text);font-family:Arial,sans-serif}
+.app{max-width:520px;margin:auto;min-height:100vh;padding:18px 14px 82px}
+header{display:flex;align-items:center;gap:10px}.logo{font-size:34px;color:#10cfff}.brand h1{margin:0;font-size:25px}.brand p{margin:3px 0;color:var(--muted);font-size:13px}.menu{margin-left:auto;background:none;border:0;color:#9ed4ff;font-size:30px}
+.top{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 0}.top button,.lesson,.nav button{border:1px solid #187bc0;background:#07233b;color:#fff;border-radius:15px;padding:14px;cursor:pointer}
+.card{border:1px solid #087dc8;border-radius:24px;overflow:hidden;background:#061d31}.hero{padding:34px 18px;text-align:center;min-height:390px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(180deg,#123a5d,#06192b 75%)}.hero h2{font-size:30px;margin:10px}.hero p{color:#d8e7f5;font-size:17px}.primary{background:#087cf5!important;border:0!important;font-weight:bold;box-shadow:0 0 18px #087cf588}.content,.player{padding:16px}.lesson{width:100%;display:flex;gap:12px;text-align:left;margin:8px 0}.lesson .name{flex:1;font-weight:bold}.lesson.active{border-color:#10cfff;box-shadow:0 0 12px #10cfff55}.player .cover{padding:30px 10px;text-align:center;background:linear-gradient(160deg,#143f63,#071a2b);border-radius:18px}.arabic{font-size:26px;margin:10px}.progress{height:7px;background:#0a5a80;border-radius:9px;margin:22px 0 5px}.progress i{display:block;height:100%;width:0;background:#10cfff}.times{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}.controls{display:flex;justify-content:space-around;margin:22px 0}.control{width:82px;height:82px;border:0;border-radius:50%;color:white;font-size:30px;cursor:pointer}.control small{display:block;font-size:11px;margin-top:6px}.play{background:#00df58}.stop{background:#ff1645}.repeat{background:#6635ff}.nav{display:grid;grid-template-columns:1fr 1fr;gap:10px}.nav .next{background:#087cf5}.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);height:70px;background:#031525f5;border-top:1px solid #155a8c;display:grid;grid-template-columns:1fr 1fr 1fr 1fr}.bottom button{background:none;border:0;color:#b9d4ee;font-weight:bold}.bottom .active{color:#10cfff}.drawer{display:none;position:fixed;inset:0;background:#0008;z-index:5}.drawer.open{display:block}.drawerbox{margin-left:auto;width:min(350px,88%);height:100%;background:#041c30;padding:25px}.drawerbox button{display:block;width:100%;padding:17px;background:none;border:0;border-bottom:1px solid #174967;color:#fff;text-align:left;font-size:16px}.close{float:right;border:0!important;font-size:28px!important}.light{--bg:#edf7fc;--text:#08223a;--muted:#4c687d}.green{--bg:#061b12;--card:#103a28}
+</style>
+</head>
+<body><div class="app">
+<header><div class="logo">◉</div><div class="brand"><h1>Quran Audio</h1><p>Luisteren • Leren • Herhalen</p></div><button class="menu" onclick="openMenu()">☰</button></header>
+<div class="top"><button onclick="language()">🌐 <span id="language">Nederlands</span></button><button onclick="theme()">🌙 <span id="theme">Donker</span></button></div>
+<main id="main"></main></div>
+<nav class="bottom">
+<button id="prevBottom" onclick="prev()">‹<br>Vorige</button>
+<button id="home" class="active" onclick="home()">⌂<br>Home</button>
+<button id="lessons" onclick="lessons()">📖<br>Lessen</button>
+<button id="nextBottom" onclick="next()">›<br>Volgende</button>
+</nav>
+<div id="drawer" class="drawer" onclick="closeMenu(event)"><div class="drawerbox" onclick="event.stopPropagation()"><button class="close" onclick="closeMenu()">×</button><h2>Menu</h2><button onclick="voice()">🎧 Stem kiezen</button><button>⚙️ Instellingen</button><button>ⓘ Over deze app</button><button>🔒 Privacy</button></div></div>
+<script>
+const data=[
+["Quraysh","سورة قريش","De Quraysh","106.mp3"],["Al-Ma'un","سورة الماعون","De hulp","107.mp3"],["Al-Kawthar","سورة الكوثر","De overvloed","108.mp3"],["Al-Kafirun","سورة الكافرون","De ongelovigen","109.mp3"],["An-Nasr","سورة النصر","De hulp","110.mp3"],["Al-Masad","سورة المسد","De palmvezel","111.mp3"],["Al-Ikhlas","سورة الإخلاص","De zuivere toewijding","112.mp3"],["Al-Falaq","سورة الفلق","De dageraad","113.mp3"],["An-Nas","سورة الناس","De mensen","114.mp3"]];
+let i=Number(localStorage.lesson||0),a=null,repeat=false;
+function save(){localStorage.lesson=i}
+function home(){if(a){a.pause();a=null}document.getElementById("main").innerHTML='<section class="card hero"><h2>Welkom bij<br>Quran Audio</h2><p>Luister, leer en herhaal waar en wanneer je wilt.</p><button class="primary" onclick="lessons()">Ga naar de lessen →</button></section>';tabs("home")}
+function lessons(){document.getElementById("main").innerHTML='<section class="card content"><h2>Lessen</h2>'+data.map((x,n)=>'<button class="lesson '+(n==i?'active':'')+'" onclick="lesson('+n+')"><b>Les '+(n+1)+'</b><span class="name">'+x[0]+'</span><span>›</span></button>').join("")+'</section>';tabs("lessons")}
+function lesson(n){i=n;save();let x=data[i];document.getElementById("main").innerHTML='<section class="card player"><div class="cover"><small>Les '+(i+1)+'</small><h2>'+x[0]+'</h2><div class="arabic">'+x[1]+'</div><p>'+x[2]+'</p></div><div class="progress"><i id="bar"></i></div><div class="times"><span id="now">00:00</span><span id="total">--:--</span></div><div class="controls"><button class="control play" onclick="toggle()">▶<small>Afspelen</small></button><button class="control stop" onclick="stop()">■<small>Stop</small></button><button class="control repeat" onclick="repeat=!repeat">↻<small>Herhalen</small></button></div></section>';tabs("lessons");a=new Audio("audio/"+x[3]);a.onloadedmetadata=()=>total.textContent=fmt(a.duration);a.ontimeupdate=()=>{bar.style.width=(a.currentTime/a.duration*100)+"%";now.textContent=fmt(a.currentTime)};a.onended=()=>{if(repeat){a.currentTime=0;a.play()}}}
+function toggle(){if(!a)lesson(i);else a.paused?a.play():a.pause()}function stop(){if(a){a.pause();a.currentTime=0}}function prev(){if(i>0)lesson(i-1)}function next(){if(i<data.length-1)lesson(i+1)}function fmt(s){return String(Math.floor(s/60)).padStart(2,"0")+":"+String(Math.floor(s%60)).padStart(2,"0")}
+function tabs(x){home.classList.toggle("active",x=="home");lessons.classList.toggle("active",x=="lessons")}
+function openMenu(){drawer.classList.add("open")}function closeMenu(e){if(!e||e.target==drawer)drawer.classList.remove("open")}
+function voice(){alert("Stem kiezen\n\nAli Jaber (standaard)");closeMenu()}
+function language(){let x=prompt("Kies: Nederlands / English / Soomaali / العربية","Nederlands");if(x){language.textContent=x;localStorage.language=x}}
+function theme(){let x=prompt("Kies: Donker / Licht / Groen","Donker");if(x){document.body.className=x=="Licht"?"light":x=="Groen"?"green":"";document.getElementById("theme").textContent=x;localStorage.theme=x}}
+if(localStorage.theme)theme.textContent=localStorage.theme;if(localStorage.language)language.textContent=localStorage.language;home();
+</script></body></html>
